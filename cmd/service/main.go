@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -8,9 +9,11 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "app", "fifa-service")
 	srv := server.New()
-	fmt.Println(srv.Info())
-	err := srv.Run()
+
+	err := srv.Run(ctx)
 	if err != nil {
 		fmt.Println("can't start server", err)
 		os.Exit(1)
