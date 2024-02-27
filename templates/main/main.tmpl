@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .page_title }}</title>
+    <!-- Подключаем стили Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <style>
+        body {
+            background-color: #f3f3f3; /* Цвет фона страницы */
+            font-family: Arial, sans-serif; /* Шрифт текста */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #4caf50; /* Цвет заголовка */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .team-field {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input[type="text"], button {
+            font-size: 18px;
+            padding: 15px; /* Увеличиваем отступы внутри элементов */
+            border: 2px solid #4caf50; /* Цвет рамки */
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fff; /* Цвет фона поля ввода и кнопки */
+            text-align: center; /* Выравниваем текст по центру */
+        }
+
+        .separator {
+            color: #4caf50; /* Цвет разделителя */
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #4caf50; /* Цвет кнопки */
+            border: none;
+            color: white;
+            padding: 20px; /* Увеличиваем отступы внутри кнопки */
+            font-size: 20px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-transform: uppercase; /* Преобразование текста в верхний регистр */
+            margin-top: 20px;
+            height: 70px; /* Увеличиваем высоту кнопки */
+        }
+
+        .btn:hover {
+            background-color: #388e3c; /* Цвет кнопки при наведении */
+        }
+
+        .team-inputs {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .team-inputs input {
+            width: calc(50% - 5px); /* Два поля ввода по половине ширины контейнера, с учетом отступов */
+        }
+
+        #update-list {
+            width: 280px; /* Задаем ширину кнопки "Обновить список" такой же как у кнопки "Матч" */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Выберите команды для матча</h1>
+    <form action="/" method="post" class="team-field">
+        <!-- Поля ввода для команд -->
+        <div class="team-inputs">
+            <input type="text" id="team1" name="team1" value="{{ .random_team_1 }}" readonly>
+            <span class="separator">-</span>
+            <input type="text" id="team2" name="team2" value="{{ .random_team_2 }}" readonly>
+        </div>
+        <!-- Кнопка "Матч" -->
+        <button class="btn" type="submit" value="Матч">Матч</button>
+    </form>
+    <!-- Кнопка "Обновить список" -->
+    <button class="btn" id="update-list">Обновить список</button>
+</div>
+
+<!-- Подключаем скрипты Materialize CSS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

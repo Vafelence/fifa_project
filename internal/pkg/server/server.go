@@ -25,6 +25,7 @@ type Server struct {
 
 func New() Server {
 	r := gin.New()
+	r.LoadHTMLGlob("templates/**/*")
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
