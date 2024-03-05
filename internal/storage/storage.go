@@ -29,6 +29,7 @@ func (s *Storage) UpdatePlayer(ctx context.Context, id string, name string) erro
 	_, err := s.db.ExecContext(ctx, "update players set name = ? where id = ?", name, id)
 	if err != nil {
 		return errors.Wrapf(err, "can't update player %d:%s", id, name)
+
 	}
 	return nil
 }
