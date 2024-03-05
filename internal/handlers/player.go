@@ -12,6 +12,7 @@ import (
 
 func (h *Handler) Player(c *gin.Context) {
 	ctx := c.Request.Context()
+	ctx.Value("user-uuid")
 	playerID := strings.ReplaceAll(c.Param("id"), "/", "")
 
 	type player struct {
