@@ -3,14 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
-	"strings"
 
-	"github.com/gin-gonic/gin"
-
+	"github.com/Vafelence/fifa_project/internal/handlers"
 	"github.com/Vafelence/fifa_project/internal/pkg/server"
 	"github.com/Vafelence/fifa_project/internal/pkg/sql"
+	"github.com/Vafelence/fifa_project/internal/services"
 	"github.com/Vafelence/fifa_project/internal/storage"
 )
 
@@ -30,62 +28,15 @@ func main() {
 		}
 	}()
 	dataStorage := storage.New(db)
-
 	srv := server.New()
 	router := srv.Router()
+	service := services.New(dataStorage)
+	handler := handlers.New(service)
 
-	router.POST("/player/*id", func(c *gin.Context) {
-		ctx := c.Request.Context()
-		playerID := strings.ReplaceAll(c.Param("id"), "/", "")
+	router.POST("/player/*id", handler.Player)
+	router.POST("/player/*id/delete", handler.Delete)
 
-		type Player struct {
-			Name string `json:"name" binding:"required"`
-		}
-		var player Player
-		err := c.BindJSON(&player)
-		if err != nil {
-			fmt.Printf("can't bind player data %s: %v", err, playerID)
-			c.JSON(http.StatusInternalServerError, &gin.H{
-				"status": "error",
-				"err":    err,
-			})
-			return
-		}
-
-		if playerID == "" {
-			err = dataStorage.AddPlayer(ctx, player.Name)
-			if err != nil {
-				fmt.Printf("can't add to storage player data %s: %v", err, player)
-				c.JSON(http.StatusInternalServerError, &gin.H{
-					"status": "error",
-					"err":    err,
-				})
-				return
-			}
-		} else {
-			err = dataStorage.UpdatePlayer(ctx, playerID, player.Name)
-			if err != nil {
-				fmt.Printf("can't update to storage player data %s: %v", err, player)
-				c.JSON(http.StatusInternalServerError, &gin.H{
-					"status": "error",
-					"err":    err,
-				})
-				return
-			}
-		}
-
-		c.JSON(http.StatusOK, &gin.H{
-			"status": "ok",
-		})
-	})
-
-	router.GET("/hello", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "main.tmpl", &gin.H{
-			"page_title":    "Выбор игровых команд",
-			"random_team_1": "Одутловатые",
-			"random_team_2": "Отрафиты",
-		})
-	})
+	router.GET("/hello", handler.Hello)
 
 	err = srv.Run(ctx)
 	if err != nil {
